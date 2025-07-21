@@ -6,14 +6,14 @@
     <update id="update" parameterType="Employee">
         update employee
         <set>
-            <if test="name !=null">name = #{name}</if>
-            <if test="username !=null">username = #{username} </if>
-            <if test="password !=null">password = #{password} </if>
-            <if test="phone !=null">phone = #{phone} </if>
-            <if test="idNumber !=null">id_Number = #{idNumber} </if>
-            <if test="status !=null">status = #{status} </if>
-            <if test="updateTime !=null">update_Time = #{updateTime} </if>
-            <if test="updateUser !=null">update_User = #{updateUser} </if>
+            <if test="name !=null">name = #{name},</if>
+            <if test="username !=null">username = #{username}, </if>
+            <if test="password !=null">password = #{password},</if>
+            <if test="phone !=null">phone = #{phone}, </if>
+            <if test="idNumber !=null">id_Number = #{idNumber}, </if>
+            <if test="status !=null">status = #{status}, </if>
+            <if test="updateTime !=null">update_Time = #{updateTime}, </if>
+            <if test="updateUser !=null">update_User = #{updateUser}, </if>
         </set>
         where id =#{id}
     </update>
@@ -27,4 +27,5 @@
         </where>
         order by create_time desc
     </select>
+
 </mapper>
