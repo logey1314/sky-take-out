@@ -54,4 +54,9 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> result = page.getResult();
         return new PageResult(total,result);
     }
+
+    @Override
+    public void deleteCategoryById(Long id) {
+        categoryMapper.deleteCategoryById(id);
+    }
 }
