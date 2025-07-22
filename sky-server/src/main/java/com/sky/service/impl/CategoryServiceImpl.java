@@ -59,4 +59,13 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategoryById(Long id) {
         categoryMapper.deleteCategoryById(id);
     }
+
+    @Override
+    public void updateCategory(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO, category);
+        category.setUpdateTime(LocalDateTime.now());
+        category.setUpdateUser(BaseContext.getCurrentId());
+        categoryMapper.deleteCategory(category);
+    }
 }
