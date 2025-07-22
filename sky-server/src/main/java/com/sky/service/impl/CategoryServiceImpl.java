@@ -55,17 +55,38 @@ public class CategoryServiceImpl implements CategoryService {
         return new PageResult(total,result);
     }
 
+    /**
+     * 删除分类
+     * @param id
+     */
     @Override
     public void deleteCategoryById(Long id) {
         categoryMapper.deleteCategoryById(id);
     }
 
+    /**
+     * 修改分类
+     * @param categoryDTO
+     */
     @Override
     public void updateCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO, category);
         category.setUpdateTime(LocalDateTime.now());
         category.setUpdateUser(BaseContext.getCurrentId());
-        categoryMapper.deleteCategory(category);
+
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 启用禁用分类
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Category category= Category.builder().status(status).id(id).build();
+        categoryMapper.update(category);
+
     }
 }

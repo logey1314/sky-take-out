@@ -132,6 +132,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * 更新员工
+     * @param employeeDTO
+     */
     @Override
     public void update(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
