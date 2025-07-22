@@ -59,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 删除分类
      * @param id
      */
+    //ToDo 目前不完善，删除必须保证当前分类没有套餐与菜品，后面需要调用dish。mapper进行查询。
     @Override
     public void deleteCategoryById(Long id) {
         categoryMapper.deleteCategoryById(id);

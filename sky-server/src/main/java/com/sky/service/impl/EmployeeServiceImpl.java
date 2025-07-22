@@ -101,8 +101,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
         long total = page.getTotal();
-        //TODO 参数名要一样吗
-        //TODO pagehelp的逻辑再听一编
+
+
         List<Employee> result = page.getResult();
         return new PageResult(total,result);
     }
