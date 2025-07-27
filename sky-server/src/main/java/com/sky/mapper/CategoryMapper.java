@@ -6,10 +6,9 @@ import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.enumeration.OperationType;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.ArrayList;
 
 @Mapper
 public interface CategoryMapper {
@@ -44,5 +43,6 @@ public interface CategoryMapper {
     @AutoFill(OperationType.UPDATE)
     void update(Category category);
 
-
+    @Select("select * from category where type=#{type}")
+    ArrayList<Category> getListByType(String type);
 }

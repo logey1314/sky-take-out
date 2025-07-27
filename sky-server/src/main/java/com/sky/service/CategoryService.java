@@ -2,7 +2,10 @@ package com.sky.service;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.entity.Category;
 import com.sky.result.PageResult;
+
+import java.util.ArrayList;
 
 public interface CategoryService {
 
@@ -37,4 +40,16 @@ public interface CategoryService {
      * @param id
      */
     void startOrStop(Integer status, Long id);
+
+
+    /**
+     * 查询分类列表
+     *
+     * @param type
+     * @return
+     */
+    ArrayList<Category> getListByType(String type);
+
+
+
 }

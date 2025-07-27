@@ -9,12 +9,14 @@ import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -90,4 +92,18 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.update(category);
 
     }
+
+    /**
+     * 查询分类列表
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public ArrayList<Category> getListByType(String type) {
+        ArrayList<Category> list=categoryMapper.getListByType(type);
+        return list;
+    }
+
+
 }

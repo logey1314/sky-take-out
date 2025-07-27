@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/admin/category")
 @Slf4j
@@ -71,11 +73,31 @@ public class CategoryController {
         categoryService.updateCategory(categoryDTO);
         return Result.success();
     }
+
+    /**
+     * 启用禁用分类
+     * @param status
+     * @param id
+     * @return
+     */
     @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用分类")
     public Result startOrStop(@PathVariable Integer status,Long id) {
         log.info("启用禁用分类{}，{}",status,id);
         categoryService.startOrStop(status,id);
         return Result.success();
+    }
+
+    /**
+     * 查询分类列表
+     * @param type
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("查询分类列表")
+    public Result getCategoryListByType(String type) {
+        ArrayList<Category> list= categoryService.getListByType(type);
+        return Result.success(list);
     }
 
 }
