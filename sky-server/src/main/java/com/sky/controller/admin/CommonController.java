@@ -1,9 +1,12 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,9 @@ import java.util.UUID;
 @Api(tags = "通用接口")
 @Slf4j
 public class CommonController {
+
+
+
     /**
      * 文件上传
      * @param file
@@ -31,18 +37,26 @@ public class CommonController {
     public Result<String> upload(MultipartFile file)  {
         log.info("文件上传{}", file);
         //本地存储
-        String filename = file.getOriginalFilename();
-        String extension = filename.substring(filename.lastIndexOf("."));
-        String name = UUID.randomUUID().toString() + extension;
-        String path="E:\\java\\sky\\houduan\\sky-take-out\\sky-server\\" +
-                "src\\main\\resources\\image\\"+name;
-        try {
-            file.transferTo(new File(path));
-        } catch (IOException e) {
-            log.info("文件上传失败");
-        }
 
+
+//        String filename = file.getOriginalFilename();
+//        String extension = filename.substring(filename.lastIndexOf("."));
+//        String name = UUID.randomUUID().toString() + extension;
+//        String path="E:\\java\\sky\\houduan\\sky-take-out\\sky-server\\" +
+//                "src\\main\\resources\\image\\"+name;
+//        try {
+//            file.transferTo(new File(path));
+//        } catch (IOException e) {
+//            log.info("文件上传失败");
+//
+//        }
+    String path="https://ts3.tc.mm.bing.net/th/id/OIP-C.EFfnQzEAtcWytl168ENvbAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3";
 
         return Result.success(path);
     }
+
+
+
+
+
 }
