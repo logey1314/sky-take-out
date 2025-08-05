@@ -128,5 +128,10 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+    @Override
+    public void startAndClose(String status, String id) {
+        dishMapper.startAndClose(status,id);
+    }
+
 
 }
