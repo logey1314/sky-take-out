@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -103,6 +104,21 @@ public class CategoryServiceImpl implements CategoryService {
     public ArrayList<Category> getListByType(String type) {
         ArrayList<Category> list=categoryMapper.getListByType(type);
         return list;
+    }
+
+    @Override
+    public List<Category> list(String type) {
+
+        if(type==null){
+            ArrayList<Category> list = categoryMapper.getListByType("1");
+            list.addAll(categoryMapper.getListByType("2"));
+            return list;
+        }
+        else {
+            ArrayList<Category> list=categoryMapper.getListByType(type);
+            return list;
+        }
+
     }
 
 

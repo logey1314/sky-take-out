@@ -6,6 +6,7 @@ import com.sky.entity.Category;
 import com.sky.result.PageResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface CategoryService {
 
@@ -50,6 +51,10 @@ public interface CategoryService {
      */
     ArrayList<Category> getListByType(String type);
 
-
-
+    /**
+     * 客户端分类
+     * @param type
+     * @return
+     */
+    List<Category> list(String type);
 }
