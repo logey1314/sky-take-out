@@ -47,6 +47,9 @@ public interface DishMapper {
     @Select("select * from dish where category_id=#{categoryId}")
     ArrayList<Dish> getDishByCatogeryId(String categoryId);
 
+    @Select("select * from dish where category_id=#{categoryId}")
+    List<Dish> getDishByCategoryId(String categoryId);
+
 
 //    @Select("select * from dish d left join  dish_flavor df on d.id=df.dish_id where d.category_id=#{categoryId}")
 //    @Results(
