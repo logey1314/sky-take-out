@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -131,6 +133,29 @@ public class DishServiceImpl implements DishService {
     @Override
     public void startAndClose(String status, String id) {
         dishMapper.startAndClose(status,id);
+    }
+
+    /**
+     * 根据分类查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<DishVO> getDishByCatogeryId(String categoryId) {
+        ArrayList<DishVO> dishVOS = new ArrayList<>();
+        DishVO dishVO = new DishVO();
+        ArrayList<Dish> dishlist=dishMapper.getDishByCatogeryId(categoryId);
+        for (Dish dish : dishlist) {
+            List<DishFlavor> flavorList = dishFlavorMapper.getByDishId(dish.getId());
+            BeanUtils.copyProperties(dish,dishVO);
+            dishVO.setFlavors(flavorList);
+            dishVOS.add(dishVO);
+        }
+
+        //TODO 怎么用多表查询，一起查到然后封装到vo里面
+//        List<DishVO> list=dishMapper.add(categoryId);
+//        return list;
+        return dishVOS;
     }
 
 

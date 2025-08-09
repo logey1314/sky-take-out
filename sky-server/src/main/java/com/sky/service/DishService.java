@@ -49,4 +49,11 @@ public interface DishService {
      * @return
      */
     void startAndClose(String status, String id);
+
+    /**
+     * 根据分类查询菜品
+     * @param categoryId
+     * @return
+     */
+    List<DishVO> getDishByCatogeryId(String categoryId);
 }

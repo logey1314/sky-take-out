@@ -8,11 +8,9 @@ import com.sky.entity.DishFlavor;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -43,4 +41,16 @@ public interface DishMapper {
 
     @Update("update dish set status=#{status} where id=#{id}")
     void startAndClose(String status, String id);
+
+
+
+    @Select("select * from dish where category_id=#{categoryId}")
+    ArrayList<Dish> getDishByCatogeryId(String categoryId);
+
+
+//    @Select("select * from dish d left join  dish_flavor df on d.id=df.dish_id where d.category_id=#{categoryId}")
+//    @Results(
+//            {@Result(column = "value", property = "flavors")}
+//    )
+//    List<DishVO> add(String categoryId);
 }
