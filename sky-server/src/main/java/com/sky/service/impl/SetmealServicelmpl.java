@@ -71,4 +71,16 @@ public class SetmealServicelmpl implements SetmealService {
         List<Setmeal> result = page.getResult();
         return new PageResult(total,result);
     }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    @Override
+    public void upadteMeal(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmeal.setStatus(StatusConstant.DISABLE);
+        setmealMapper.upadteMeal(setmeal);
+    }
 }

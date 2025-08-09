@@ -49,5 +49,17 @@ public class SetMealController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     * @return
+     */
+    @PutMapping
+    public Result upadteMeal(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐{}",setmealDTO);
+        setmealService.upadteMeal(setmealDTO);
+        return Result.success();
+    }
+
 
 }

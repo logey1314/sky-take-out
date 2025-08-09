@@ -2,13 +2,11 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,4 +22,10 @@ public interface SetmealMapper {
     void addMeal(Setmeal setmeal);
 
     Page<Setmeal> page(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    @AutoFill(value = OperationType.UPDATE)
+    @Update("update setmeal set category_id=#{categoryId}, name=#{name}, price=#{price}, " +
+            "description=#{description}, image=#{image}, status=#{status}, " +
+            "update_time=#{updateTime}, update_user=#{updateUser} where id=#{id}")
+    void upadteMeal(Setmeal setmeal);
 }
