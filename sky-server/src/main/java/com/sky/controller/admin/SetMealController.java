@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -24,11 +25,29 @@ public class SetMealController {
     @Autowired
     private SetmealService setmealService;
 
+    /**
+     * 新增套餐
+     * @param setmealDTO
+     * @return
+     */
     @PostMapping
     public Result addMeal(@RequestBody SetmealDTO setmealDTO){
         log.info("新增套餐{}",setmealDTO);
         setmealService.addMeal(setmealDTO);
         return  Result.success();
     }
+
+    /**
+     * 套餐分页查询
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    public Result page(SetmealPageQueryDTO setmealPageQueryDTO){
+        log.info("套餐分页查询{}",setmealPageQueryDTO);
+        PageResult pageResult= setmealService.page(setmealPageQueryDTO);
+        return Result.success(pageResult);
+    }
+
 
 }

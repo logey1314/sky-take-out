@@ -7,6 +7,7 @@ import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.Setmeal;
@@ -55,5 +56,19 @@ public class SetmealServicelmpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmeal.setStatus(StatusConstant.DISABLE);
         setmealMapper.addMeal(setmeal);
+    }
+
+    /**
+     * 套餐分页查询
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult page(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
+        Page<Setmeal> page= setmealMapper.page(setmealPageQueryDTO);
+        long total = page.getTotal();
+        List<Setmeal> result = page.getResult();
+        return new PageResult(total,result);
     }
 }
