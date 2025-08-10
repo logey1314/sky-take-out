@@ -32,4 +32,12 @@ public interface SetmealService {
      * @param setmealDTO
      */
     void upadteMeal(SetmealDTO setmealDTO);
+
+    /**
+     *套餐起售与停售
+     * @param status
+     * @param id
+     * @return
+     */
+    void startAndClose(String status, String id);
 }

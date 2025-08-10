@@ -61,5 +61,18 @@ public class SetMealController {
         return Result.success();
     }
 
+    /**
+     *套餐起售与停售
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result startAndClose(@PathVariable String status,String id){
+        log.info("套餐起售与停售{}，ID：{}",status,id);
+        setmealService.startAndClose(status,id);
+        return Result.success();
+    }
+
 
 }

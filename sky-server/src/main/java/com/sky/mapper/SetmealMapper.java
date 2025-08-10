@@ -28,4 +28,7 @@ public interface SetmealMapper {
             "description=#{description}, image=#{image}, status=#{status}, " +
             "update_time=#{updateTime}, update_user=#{updateUser} where id=#{id}")
     void upadteMeal(Setmeal setmeal);
+
+    @Update("update setmeal set status=#{status} where id=#{id}")
+    void startAndClose(String status, String id);
 }

@@ -34,6 +34,7 @@ import java.util.List;
 @Slf4j
 public class SetmealServicelmpl implements SetmealService {
 
+
     @Autowired
     private SetmealDishMapper setmealDishMapper;
     @Autowired
@@ -82,5 +83,16 @@ public class SetmealServicelmpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmeal.setStatus(StatusConstant.DISABLE);
         setmealMapper.upadteMeal(setmeal);
+    }
+
+    /**
+     *套餐起售与停售
+     * @param status
+     * @param id
+     * @return
+     */
+    @Override
+    public void startAndClose(String status, String id) {
+        setmealMapper.startAndClose(status,id);
     }
 }
