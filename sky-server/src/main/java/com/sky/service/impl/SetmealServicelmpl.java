@@ -20,6 +20,7 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,8 +128,19 @@ public class SetmealServicelmpl implements SetmealService {
     }
 
     @Override
-    public SetmealVO getSetmeal(String id) {
-        return null;
+    public SetmealVO getSetmeal(@PathVariable String id) {
+        SetmealVO setmealVO = new SetmealVO();
+        Setmeal setmeal= setmealMapper.getSetmeal(id);
+        ArrayList<SetmealDish> setmealDishes= setmealDishMapper.getSetmealDish(id);
+        BeanUtils.copyProperties(setmeal,setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
+
+    @Override
+    public List<DishItemVO> getDishBySetmealId(String setmealId) {
+        ArrayList<DishItemVO> dishItemVOArrayList= setmealDishMapper.getDishBySetmealId(setmealId);
+        return dishItemVOArrayList;
     }
 
 }

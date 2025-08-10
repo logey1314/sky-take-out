@@ -37,4 +37,7 @@ public interface SetmealMapper {
 
     @Select("select  setmeal.status from setmeal where id=#{id}")
     String getStatus(String id);
+
+    @Select("select * from setmeal where id=#{id}")
+    Setmeal getSetmeal(String id);
 }

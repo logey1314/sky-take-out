@@ -87,8 +87,13 @@ public class SetMealController {
         return Result.success();
     }
 
+    /**
+     * 查询套餐
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
-    public Result<SetmealVO> getSetmeal(String id){
+    public Result<SetmealVO> getSetmeal(@PathVariable  String id){
         log.info("查询套餐");
         SetmealVO setmealVO= setmealService.getSetmeal(id);
         return Result.success(setmealVO);

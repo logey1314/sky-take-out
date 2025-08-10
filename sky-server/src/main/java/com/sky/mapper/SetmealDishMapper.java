@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.vo.DishItemVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,13 @@ public interface SetmealDishMapper {
     ArrayList<Setmeal> getSetmealByCategoryId(String categoryId);
 
     void addSetmealDish(List<SetmealDish> setmealDishes);
+
+    @Select("select * from setmeal_dish where setmeal_id=#{id}")
+    ArrayList<SetmealDish> getSetmealDish(String id);
+
+    @Select("SELECT sd.name, sd.copies, d.image, d.description\n" +
+            "FROM setmeal_dish sd\n" +
+            "LEFT JOIN sky_take_out.dish d ON sd.dish_id = d.id\n" +
+            "WHERE sd.setmeal_id = #{setmealId}")
+    ArrayList<DishItemVO> getDishBySetmealId(String setmealId);
 }
