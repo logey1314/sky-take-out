@@ -31,4 +31,10 @@ public interface SetmealMapper {
 
     @Update("update setmeal set status=#{status} where id=#{id}")
     void startAndClose(String status, String id);
+
+
+    void deleteSetmeal(List<String> idslist);
+
+    @Select("select  setmeal.status from setmeal where id=#{id}")
+    String getStatus(String id);
 }

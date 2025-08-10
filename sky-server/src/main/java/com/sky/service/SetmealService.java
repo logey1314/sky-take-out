@@ -40,4 +40,11 @@ public interface SetmealService {
      * @return
      */
     void startAndClose(String status, String id);
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     * @return
+     */
+    void deleteSetmeal(String ids);
 }

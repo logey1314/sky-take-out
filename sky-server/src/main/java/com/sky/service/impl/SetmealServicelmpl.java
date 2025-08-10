@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +93,29 @@ public class SetmealServicelmpl implements SetmealService {
      * @return
      */
     @Override
+    //TODO 需要进行判断
     public void startAndClose(String status, String id) {
         setmealMapper.startAndClose(status,id);
     }
+    /**
+     * 批量删除套餐
+     * @param ids
+     * @return
+     */
+
+    @Override
+    public void deleteSetmeal(String ids) {
+        //套餐是否在售，在售不能删除
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            String status=setmealMapper.getStatus(id);
+
+            if (status.equals(StatusConstant.ENABLE.toString())) {
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_DISHABLEABLE_FAILED);
+            }
+        }
+        List<String> idslist = Arrays.asList(ids.split(","));
+        setmealMapper.deleteSetmeal(idslist);
+    }
+
 }

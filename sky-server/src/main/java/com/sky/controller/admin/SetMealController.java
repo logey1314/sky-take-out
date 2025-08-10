@@ -74,5 +74,17 @@ public class SetMealController {
         return Result.success();
     }
 
+    /**
+     * 批量删除套餐
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public Result deleteSetmeal(String ids){
+        log.info("批量删除套餐{}",ids);
+        setmealService.deleteSetmeal(ids);
+        return Result.success();
+    }
+
 
 }
