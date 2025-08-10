@@ -11,6 +11,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.Setmeal;
+import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
@@ -20,6 +21,7 @@ import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.service.SetmealService;
 import com.sky.vo.DishVO;
+import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,11 @@ public class SetmealServicelmpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmeal.setStatus(StatusConstant.DISABLE);
         setmealMapper.addMeal(setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        for (SetmealDish setmealDish : setmealDishes) {
+            setmealDish.setSetmealId(setmeal.getId());
+        }
+        setmealDishMapper.addSetmealDish(setmealDishes);
     }
 
     /**
@@ -116,6 +123,11 @@ public class SetmealServicelmpl implements SetmealService {
         }
         List<String> idslist = Arrays.asList(ids.split(","));
         setmealMapper.deleteSetmeal(idslist);
+    }
+
+    @Override
+    public SetmealVO getSetmeal(String id) {
+        return null;
     }
 
 }
