@@ -4,6 +4,7 @@ import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -11,4 +12,31 @@ public interface OrderMapper {
 
 
     void insert(Orders order);
+
+
+    /**
+     * 根据订单号和用户id查询订单
+     * @param orderNumber
+     * @param userId
+     */
+    @Select("select * from orders where number = #{orderNumber} and user_id= #{userId}")
+    Orders getByNumberAndUserId(String orderNumber, Long userId);
+
+    /**
+     * 修改订单信息
+     * @param orders
+     */
+    void update(Orders orders);
+    /**
+     * 更新订单状态，处理支付和支付时间的更新
+     *
+     * @param orderStatus 订单状态
+     * @param orderPaidStatus 订单支付状态
+     */
+    @Update("update orders set status = #{orderStatus}, pay_status = #{orderPaidStatus}, checkout_time = #{check_out_time} "
+            + "where number = #{orderNumber}")
+    void updateStatus(Integer orderStatus, Integer orderPaidStatus, LocalDateTime check_out_time, String orderNumber);
+
+
+
 }
