@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(cacheNames="setmealCache",key="#categoryId")
     public Result<List<Setmeal>> getSetmealByCategoryId(String categoryId) {
         log.info("用户端查据分类id查询套餐{}",categoryId);
         List<Setmeal> setmealList =setmealService.getSetmealByCategoryId(categoryId);
