@@ -67,11 +67,22 @@ public class OrderController {
      * @param status
      * @return
      */
-    @PostMapping("/historyOrders")
+    @GetMapping("/historyOrders")
     public Result<PageResult> getHistoryOrder(Integer page,Integer pageSize,String status){
         log.info("获取历史订单");
         PageResult pageResult= orderService.getHistoryOrder(page,pageSize,status);
         return  Result.success(pageResult);
     }
 
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/cancel/{id}")
+    public Result cancelOrder(@PathVariable String id){
+        log.info("用户取消订单{}",id);
+        orderService.cancelOrder(id);
+        return Result.success();
+    }
 }

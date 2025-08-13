@@ -194,17 +194,53 @@ public class Orderlmpl implements OrderService {
      * @param status
      * @return
      */
+    //TODO  两种方法实现分页 查询 联表且含有list查询
+//    @Override
+//    public PageResult getHistoryOrder(Integer page, Integer pageSize, String status) {
+//        PageHelper.startPage(page, pageSize);
+//        Long userId = BaseContext.getCurrentId();
+//        Page<Orders> ordersPage = orderMapper.getHistoryOrder(userId,status);
+//        ArrayList<OrderVO> orderVoList = new ArrayList<>();
+//        List<Orders> ordersList = ordersPage.getResult();
+//        for (Orders orders : ordersList) {
+//            OrderVO orderVO = new OrderVO();
+//            BeanUtils.copyProperties(orders, orderVO);
+//            List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(orders.getId().toString());
+//            orderVO.setOrderDetailList(orderDetail);
+//            orderVoList.add(orderVO);
+//        }
+//        long total = ordersPage.getTotal();
+//        PageResult pageResult = new PageResult();
+//        pageResult.setTotal(total);
+//        pageResult.setRecords(orderVoList);
+//        return pageResult;
+//    }
     @Override
-    public PageResult getHistoryOrder(Integer page, Integer pageSize, String status) {
+    public PageResult getHistoryOrder(Integer page, Integer pageSize, String status){
         PageHelper.startPage(page, pageSize);
-        //TODO  两种方法实现分页 查询 联表且含有list查询
-        Page<OrderVO> orderVOPage= orderMapper.getHistoryOrde(page,pageSize,status);
-
-        long total = orderVOPage.getTotal();
-        List<OrderVO> result = orderVOPage.getResult();
-        PageResult pageResult = new PageResult();
-        pageResult.setTotal(total);
-        pageResult.setRecords(result);
-        return pageResult;
+        Long userId = BaseContext.getCurrentId();
+        Page<OrderVO> orderVOPage= orderMapper.getHistoryOrderByResultMap(userId,status);
+        return new PageResult(orderVOPage.getTotal(), orderVOPage.getResult());
     }
+
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    @Override
+    public void cancelOrder(String id) {
+
+        Orders orders = new Orders();
+        orders.setId(Long.valueOf(id));
+        orders.setStatus(Orders.CANCELLED);
+        orders.setPayStatus(Orders.REFUND);
+        orders.setCancelTime(LocalDateTime.now());
+
+        // 订单状态修改 支付状态修改 取消原因 取消时间 送达时间为null
+            orderMapper.cancelOrder(orders);
+        //退款
+    }
+
+
 }

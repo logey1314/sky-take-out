@@ -23,5 +23,72 @@
         </set>
         where id = #{id}
     </update>
+    <select id="getHistoryOrder" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+            <if test="status !=null and status != ''">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+
+
+    <resultMap id="OrderVOMap" type="com.sky.vo.OrderVO">
+        <id property="id" column="id"/>
+        <result property="number" column="number"/>
+        <result property="status" column="status"/>
+        <result property="userId" column="user_id"/>
+        <result property="addressBookId" column="address_book_id"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="checkoutTime" column="checkout_time"/>
+        <result property="payMethod" column="pay_method"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="amount" column="amount"/>
+        <result property="remark" column="remark"/>
+        <result property="userName" column="user_name"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="consignee" column="consignee"/>
+
+        <!-- 一对多关联查询订单明细 -->
+        <collection property="orderDetailList" ofType="com.sky.entity.OrderDetail">
+            <id property="id" column="detail_id"/>
+            <result property="name" column="detail_name"/>
+            <result property="image" column="detail_image"/>
+            <result property="orderId" column="order_id"/>
+            <result property="dishId" column="dish_id"/>
+            <result property="setmealId" column="setmeal_id"/>
+            <result property="dishFlavor" column="dish_flavor"/>
+            <result property="number" column="detail_number"/>
+            <result property="amount" column="detail_amount"/>
+        </collection>
+    </resultMap>
+
+    <select id="getHistoryOrderByResultMap" resultMap="OrderVOMap">
+        SELECT
+        o.id, o.number, o.status, o.user_id, o.address_book_id,
+        o.order_time, o.checkout_time, o.pay_method, o.pay_status,
+        o.amount, o.remark, o.user_name, o.phone, o.address, o.consignee,
+        od.id as detail_id, od.name as detail_name, od.image as detail_image,
+        od.order_id, od.dish_id, od.setmeal_id, od.dish_flavor,
+        od.number as detail_number, od.amount as detail_amount
+        FROM orders o
+        LEFT JOIN order_detail od ON o.id = od.order_id
+        <where>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                AND o.status = #{status}
+            </if>
+        </where>
+        ORDER BY o.order_time DESC
+    </select>
+
+
+
 
 </mapper>

@@ -43,5 +43,12 @@ public interface OrderMapper {
     Orders getOrder(String id);
 
 
-    Page<OrderVO> getHistoryOrde(Integer page, Integer pageSize, String status);
+
+
+    Page<Orders> getHistoryOrder(Long userId, String status);
+
+    Page<OrderVO> getHistoryOrderByResultMap(Long userId, String status);
+
+    @Update("update orders set status=#{status} ,pay_status=#{payStatus},cancel_time=#{cancelTime} where id=#{id}")
+    void cancelOrder(Orders orders);
 }

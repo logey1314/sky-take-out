@@ -44,4 +44,11 @@ public interface OrderService {
      * @return
      */
     PageResult getHistoryOrder(Integer page, Integer pageSize, String status);
+
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    void cancelOrder(String id);
 }
