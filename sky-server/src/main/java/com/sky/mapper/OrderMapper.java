@@ -1,7 +1,9 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
+import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,9 @@ public interface OrderMapper {
             + "where number = #{orderNumber}")
     void updateStatus(Integer orderStatus, Integer orderPaidStatus, LocalDateTime check_out_time, String orderNumber);
 
+    @Select("SELECT * from orders where id=#{id}")
+    Orders getOrder(String id);
 
 
+    Page<OrderVO> getHistoryOrde(Integer page, Integer pageSize, String status);
 }
