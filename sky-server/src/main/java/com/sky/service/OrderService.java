@@ -51,4 +51,11 @@ public interface OrderService {
      * @return
      */
     void cancelOrder(String id);
+
+    /**
+     * 再来一单
+     * @param id
+     * @return
+     */
+    void againOrder(String id);
 }

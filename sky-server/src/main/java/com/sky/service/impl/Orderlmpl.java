@@ -241,6 +241,40 @@ public class Orderlmpl implements OrderService {
             orderMapper.cancelOrder(orders);
         //退款
     }
+    /**
+     * 再来一单
+     * @param id
+     * @return
+     */
+    @Override
+    public void againOrder(String id) {
+        //添加订单
+        Orders order = orderMapper.getOrder(id);
+        List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(id);
+
+        Orders againOrder = new Orders();
+        BeanUtils.copyProperties(order, againOrder);
+
+        againOrder.setId(null);
+        againOrder.setNumber(String.valueOf(System.currentTimeMillis()));
+        againOrder.setStatus(Orders.PENDING_PAYMENT);
+        againOrder.setOrderTime(LocalDateTime.now());
+        againOrder.setCheckoutTime(null);
+        againOrder.setPayStatus(Orders.UN_PAID);
+        againOrder.setEstimatedDeliveryTime(null);
+        orderMapper.insert(againOrder);
+        //添加商品细节
+        List<OrderDetail> detailList = new ArrayList<OrderDetail>();
+        for (OrderDetail detail : orderDetail) {
+            OrderDetail orderDetail1 = new OrderDetail();
+            BeanUtils.copyProperties(detail, orderDetail1);
+            orderDetail1.setId(null);
+            orderDetail1.setOrderId(againOrder.getId());
+            detailList.add(orderDetail1);
+        }
+        orderDetailMapper.insertBath(detailList);
+
+    }
 
 
 }
