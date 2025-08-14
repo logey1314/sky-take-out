@@ -46,4 +46,12 @@ public class OrderController {
     }
 
 
+    @GetMapping("/details/{id}")
+    public Result<OrderVO> getOrderDetail(@PathVariable("id") String orderId){
+        log.info("查询订单详情{}",orderId);
+        OrderVO orderDetail = orderService.getOrderDetail(orderId);
+        return Result.success(orderDetail);
+    }
+
+
 }
