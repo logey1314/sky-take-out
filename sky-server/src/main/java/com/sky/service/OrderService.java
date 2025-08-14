@@ -84,4 +84,10 @@ public interface OrderService {
      * @return
      */
     void regection(OrdersRejectionDTO rejectionDTO);
+
+    /**
+     * 商户取消订单
+     * @param cancelDTO
+     */
+    void cancelOrder(OrdersCancelDTO cancelDTO);
 }

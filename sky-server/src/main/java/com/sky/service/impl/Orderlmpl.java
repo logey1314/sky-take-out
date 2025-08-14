@@ -387,16 +387,33 @@ public class Orderlmpl implements OrderService {
         orders.setStatus(Orders.CANCELLED);
         orders.setRejectionReason(rejectionDTO.getRejectionReason());
         orders.setCancelTime(LocalDateTime.now());
-
         orderMapper.update(orders);
     }
 
+    /**
+     * 商户取消订单
+     * @param cancelDTO
+     */
+    @Override
+    public void cancelOrder(OrdersCancelDTO cancelDTO) {
 
+        Orders order = orderMapper.getOrder(cancelDTO.getId().toString());
+        if (order == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
 
+        Integer payStatus = order.getPayStatus();
+        if (payStatus == Orders.PAID) {
+            //退款
+        }
+        Orders orders = new Orders();
+        orders.setId(order.getId());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+        orders.setCancelReason(cancelDTO.getCancelReason());
+        orderMapper.update(orders);
 
-
-
-
+    }
 
 
 }
