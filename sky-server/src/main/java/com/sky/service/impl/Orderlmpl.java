@@ -19,6 +19,7 @@ import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -318,7 +319,20 @@ public class Orderlmpl implements OrderService {
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(orders, orderVO);
             List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(orders.getId().toString());
+            String s = new String();
+            for (OrderDetail detail : orderDetail) {
+                if(detail.getDishFlavor()!=null) {
+                    s = s + detail.getName() + detail.getDishFlavor() + "*" + detail.getNumber();
+                }
+                else {
+                    s = s + detail.getName()  + "*" + detail.getNumber();
+                }
+
+            }
+            orderVO.setOrderDishes(s);
             orderVO.setOrderDetailList(orderDetail);
+
+
             orderVOS.add(orderVO);
         }
 
@@ -327,7 +341,21 @@ public class Orderlmpl implements OrderService {
         
         return new PageResult(total, orderVOS);
     }
-
+    /**
+     * 订单统计
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO orderStatistics() {
+        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED);
+        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED);
+        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS);
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        orderStatisticsVO.setToBeConfirmed(toBeConfirmed);
+        orderStatisticsVO.setConfirmed(confirmed);
+        orderStatisticsVO.setDeliveryInProgress(deliveryInProgress);
+        return  orderStatisticsVO;
+    }
 
 
 }

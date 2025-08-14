@@ -59,4 +59,7 @@ public interface OrderMapper {
      * @return
      */
     Page<Orders> orderSearch(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    @Select("select  COUNT(*) from orders where status=#{status}")
+    Integer countStatus(Integer status);
 }

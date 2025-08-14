@@ -8,6 +8,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.ApiOperation;
@@ -32,5 +33,17 @@ public class OrderController {
         PageResult pageResult=orderService.orderSearch(ordersPageQueryDTO);
         return  Result.success(pageResult);
     }
+
+    /**
+     * 订单统计
+     * @return
+     */
+    @GetMapping("/statistics")
+    public Result<OrderStatisticsVO> orderStatistics(){
+        OrderStatisticsVO orderStatisticsVO= orderService.orderStatistics();
+        log.info("订单统计");
+        return Result.success(orderStatisticsVO);
+    }
+
 
 }
