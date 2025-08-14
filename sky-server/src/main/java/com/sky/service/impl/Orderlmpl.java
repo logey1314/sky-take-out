@@ -366,5 +366,37 @@ public class Orderlmpl implements OrderService {
 
     }
 
+    /**
+     * 拒单
+     * @param rejectionDTO
+     * @return
+     */
+    @Override
+    public void regection(OrdersRejectionDTO rejectionDTO) {
+        Orders order = orderMapper.getOrder(rejectionDTO.getId().toString());
+        if (order == null||!order.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Integer payStatus = order.getPayStatus();
+        if (payStatus == Orders.PAID) {
+            //退款
+        }
+        Orders orders = new Orders();
+        BeanUtils.copyProperties(order, orders);
+        orders.setId(orders.getId());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setRejectionReason(rejectionDTO.getRejectionReason());
+        orders.setCancelTime(LocalDateTime.now());
+
+        orderMapper.update(orders);
+    }
+
+
+
+
+
+
+
+
 
 }
