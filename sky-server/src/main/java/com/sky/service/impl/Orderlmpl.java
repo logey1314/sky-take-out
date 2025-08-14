@@ -415,5 +415,32 @@ public class Orderlmpl implements OrderService {
 
     }
 
+    @Override
+    public void deliveryOrder(String id) {
+        Orders order = orderMapper.getOrder(id);
+        if (order == null||!order.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Orders orders = new Orders();
+        orders.setId(order.getId());
+        orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orderMapper.update(orders);
+    }
+
+    @Override
+    public void completeOrder(String id) {
+        Orders order = orderMapper.getOrder(id);
+        if (order == null||!order.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        Orders orders = new Orders();
+        orders.setId(order.getId());
+        orders.setStatus(Orders.COMPLETED);
+        orders.setDeliveryTime(LocalDateTime.now());
+        orderMapper.update(orders);
+
+    }
+
 
 }

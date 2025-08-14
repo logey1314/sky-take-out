@@ -91,6 +91,33 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * 商户派送订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/delivery/{id}")
+    public Result deliveryOrder(@PathVariable String id){
+        log.info("商户派送订单{}",id);
+        orderService.deliveryOrder(id);
+        return Result.success();
+    }
+
+    /**
+     * 商户完成订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/complete/{id}")
+    public Result completeOrder(@PathVariable String id){
+        log.info("商户完成订单{}",id);
+        orderService.completeOrder(id);
+        return Result.success();
+    }
+
+
+
+
 
 
 

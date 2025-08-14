@@ -90,4 +90,17 @@ public interface OrderService {
      * @param cancelDTO
      */
     void cancelOrder(OrdersCancelDTO cancelDTO);
+    /**
+     * 商户派送订单
+     * @param id
+     * @return
+     */
+    void deliveryOrder(String id);
+
+    /**
+     * 商户完成订单
+     * @param id
+     * @return
+     */
+    void completeOrder(String id);
 }
