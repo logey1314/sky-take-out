@@ -47,6 +47,7 @@ public class Orderlmpl implements OrderService {
     @Autowired
     private WeChatPayUtil weChatPayUtil;
 
+
     @Override
     public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) {
         //处理业务异常  收货地址为空  购物车为空
@@ -231,10 +232,17 @@ public class Orderlmpl implements OrderService {
     @Override
     public void cancelOrder(String id) {
 
+        Orders cancleOrder = orderMapper.getOrder(id);
+        if (cancleOrder == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
         Orders orders = new Orders();
-        orders.setId(Long.valueOf(id));
+        orders.setId(cancleOrder.getId());
+        if(cancleOrder.getStatus().equals(Orders.TO_BE_CONFIRMED)){
+            orders.setPayStatus(Orders.REFUND);
+        }
         orders.setStatus(Orders.CANCELLED);
-        orders.setPayStatus(Orders.REFUND);
+        orders.setCancelReason("用户取消");
         orders.setCancelTime(LocalDateTime.now());
 
         // 订单状态修改 支付状态修改 取消原因 取消时间 送达时间为null
@@ -248,33 +256,47 @@ public class Orderlmpl implements OrderService {
      */
     @Override
     public void againOrder(String id) {
-        //添加订单
-        Orders order = orderMapper.getOrder(id);
+        Long userId = BaseContext.getCurrentId();
         List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(id);
-
-        Orders againOrder = new Orders();
-        BeanUtils.copyProperties(order, againOrder);
-
-        againOrder.setId(null);
-        againOrder.setNumber(String.valueOf(System.currentTimeMillis()));
-        againOrder.setStatus(Orders.PENDING_PAYMENT);
-        againOrder.setOrderTime(LocalDateTime.now());
-        againOrder.setCheckoutTime(null);
-        againOrder.setPayStatus(Orders.UN_PAID);
-        againOrder.setEstimatedDeliveryTime(null);
-        orderMapper.insert(againOrder);
-        //添加商品细节
-        List<OrderDetail> detailList = new ArrayList<OrderDetail>();
-        for (OrderDetail detail : orderDetail) {
-            OrderDetail orderDetail1 = new OrderDetail();
-            BeanUtils.copyProperties(detail, orderDetail1);
-            orderDetail1.setId(null);
-            orderDetail1.setOrderId(againOrder.getId());
-            detailList.add(orderDetail1);
+        ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
+        for (OrderDetail orderDetail1 : orderDetail) {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(orderDetail1, shoppingCart,"id");
+            shoppingCart.setUserId(userId);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            shoppingCarts.add(shoppingCart);
+            shoppingCartMapper.add(shoppingCart);
         }
-        orderDetailMapper.insertBath(detailList);
+
 
     }
+//        //添加订单
+//        Orders order = orderMapper.getOrder(id);
+//        List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(id);
+//
+//        Orders againOrder = new Orders();
+//        BeanUtils.copyProperties(order, againOrder);
+//
+//        againOrder.setId(null);
+//        againOrder.setNumber(String.valueOf(System.currentTimeMillis()));
+//        againOrder.setStatus(Orders.PENDING_PAYMENT);
+//        againOrder.setOrderTime(LocalDateTime.now());
+//        againOrder.setCheckoutTime(null);
+//        againOrder.setPayStatus(Orders.UN_PAID);
+//        againOrder.setEstimatedDeliveryTime(null);
+//        orderMapper.insert(againOrder);
+//        //添加商品细节
+//        List<OrderDetail> detailList = new ArrayList<OrderDetail>();
+//        for (OrderDetail detail : orderDetail) {
+//            OrderDetail orderDetail1 = new OrderDetail();
+//            BeanUtils.copyProperties(detail, orderDetail1);
+//            orderDetail1.setId(null);
+//            orderDetail1.setOrderId(againOrder.getId());
+//            detailList.add(orderDetail1);
+//        }
+//        orderDetailMapper.insertBath(detailList);
+//
+//    }
 
 
 }
