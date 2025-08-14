@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.vo.OrderVO;
@@ -51,4 +52,11 @@ public interface OrderMapper {
 
     @Update("update orders set status=#{status} ,pay_status=#{payStatus},cancel_time=#{cancelTime} where id=#{id}")
     void cancelOrder(Orders orders);
+
+    /**
+     * 管理端订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page<Orders> orderSearch(OrdersPageQueryDTO ordersPageQueryDTO);
 }

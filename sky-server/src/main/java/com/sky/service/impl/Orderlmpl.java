@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.dto.ShoppingCartDTO;
@@ -267,10 +268,7 @@ public class Orderlmpl implements OrderService {
             shoppingCarts.add(shoppingCart);
             shoppingCartMapper.add(shoppingCart);
         }
-
-
-    }
-//        //添加订单
+        //        //添加订单
 //        Orders order = orderMapper.getOrder(id);
 //        List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(id);
 //
@@ -297,6 +295,39 @@ public class Orderlmpl implements OrderService {
 //        orderDetailMapper.insertBath(detailList);
 //
 //    }
+
+
+    }
+
+    /**
+     * 管理端订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult orderSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        int page = ordersPageQueryDTO.getPage();
+        int pageSize = ordersPageQueryDTO.getPageSize();
+        PageHelper.startPage(page, pageSize);
+        Page<Orders> ordersPage=orderMapper.orderSearch(ordersPageQueryDTO);
+        List<Orders> ordersList = ordersPage.getResult();
+        //需要封装成ordervo
+        ArrayList<OrderVO> orderVOS = new ArrayList<>();
+
+        for (Orders orders : ordersList) {
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(orders, orderVO);
+            List<OrderDetail> orderDetail = orderDetailMapper.getOrderDetail(orders.getId().toString());
+            orderVO.setOrderDetailList(orderDetail);
+            orderVOS.add(orderVO);
+        }
+
+
+        long total = ordersPage.getTotal();
+        
+        return new PageResult(total, orderVOS);
+    }
+
 
 
 }
