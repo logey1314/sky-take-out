@@ -8,4 +8,20 @@
         insert into user (openid, name, phone, sex, id_number, avatar, create_time)
         values (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})
     </insert>
+
+
+    <select id="getNewUserStatistics" resultType="java.lang.Integer">
+        select COUNT(id) from user
+        <where>
+             id is not null
+            <if test="begin != null">
+                and order_time &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+
+        </where>
+
+    </select>
 </mapper>
