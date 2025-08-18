@@ -456,5 +456,20 @@ public class Orderlmpl implements OrderService {
 
     }
 
+    @Override
+    public void reminder(Long id) {
+        Orders order = orderMapper.getOrder(String.valueOf(id));
+        if (order == null||!order.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","订单号:"+order.getId());
+        String json = JSON.toJSONString(map);
+        webSockerServer.sendToAllClient(json);
+
+    }
+
 
 }

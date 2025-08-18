@@ -103,4 +103,11 @@ public interface OrderService {
      * @return
      */
     void completeOrder(String id);
+
+    /**
+     * 客户催单
+     * @param id
+     * @return
+     */
+    void reminder(Long id);
 }

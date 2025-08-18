@@ -55,6 +55,7 @@ public class WebSockerServer {
      *
      * @param message
      */
+    //todo websocket原理 session
     public void sendToAllClient(String message) {
         Collection<Session> sessions = sessionMap.values();
         for (Session session : sessions) {
