@@ -71,5 +71,11 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTime(Integer pendingPayment, LocalDateTime time);
 
 
-
+    /**
+     * 统计某天营业额
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    Double getTurnOver(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
 }
