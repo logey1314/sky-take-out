@@ -37,7 +37,7 @@ public class OrderTask {
     }
 
     /**
-     * 处理一直送达中订单
+     * 处理一直送达中订单1
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void processdeliveryOrder(){
