@@ -7,6 +7,7 @@ import com.sky.mapper.ReportMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class ReportServicelmpl implements ReportService {
     private OrderMapper orderMapper;
     @Autowired
     private UserMapper userMapper;
+
 
     /**
      * 统计指定时间营业额
@@ -111,5 +113,71 @@ public class ReportServicelmpl implements ReportService {
         userReportVO.setNewUserList(ne);
 
         return userReportVO;
+    }
+
+    /**
+     * 统计指定时间订单统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public OrderReportVO ordersStatistics(LocalDate begin, LocalDate end) {
+        ArrayList<LocalDate> dateList = new ArrayList<>();
+        ArrayList<Integer> orderCountList = new ArrayList<>();
+        ArrayList<Integer> validOrderCountList = new ArrayList<>();
+
+        dateList.add(begin);
+        while(!begin.equals(end)){
+            begin=begin.plusDays(1);
+            dateList.add(begin);
+        }
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            //一天总订单
+            Integer status=null;
+            Integer orderCount = orderMapper.getOrderCount(beginTime, endTime, null);
+            if(orderCount==null){
+                orderCount=0;
+            }
+            orderCountList.add(orderCount);
+            //一天有效订单
+            Integer validOrderCount= orderMapper.getOrderCount(beginTime, endTime, Orders.COMPLETED);
+            if(validOrderCount==null){
+                validOrderCount=0;
+            }
+            validOrderCountList.add(validOrderCount);
+
+        }
+
+        // 期间总订单
+        Integer status=null;
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        Integer totalorderCount = orderMapper.getOrderCount(beginTime, endTime, status);
+        if(totalorderCount==null){
+            totalorderCount=0;
+        }
+
+        //期间总有效订单
+        Integer totalVaildorderCount = orderMapper.getOrderCount(beginTime, endTime, Orders.COMPLETED);
+        if(totalVaildorderCount==null){
+            totalVaildorderCount=0;
+        }
+
+        String date = StringUtils.join(dateList, ",");
+        String va = StringUtils.join(validOrderCountList, ",");
+        String or = StringUtils.join(orderCountList, ",");
+
+        OrderReportVO orderReportVO = new OrderReportVO();
+        orderReportVO.setDateList(date);
+        orderReportVO.setOrderCountList(or);
+        orderReportVO.setValidOrderCountList(va);
+        orderReportVO.setTotalOrderCount(totalorderCount);
+        orderReportVO.setValidOrderCount(totalVaildorderCount);
+        orderReportVO.setOrderCompletionRate((totalVaildorderCount/totalorderCount)*100.0);
+
+        return orderReportVO;
     }
 }

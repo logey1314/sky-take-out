@@ -78,4 +78,14 @@ public interface OrderMapper {
      * @return
      */
     Double getTurnOver(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
+
+    /**
+     * 统计指定时间订单统计
+     * @param beginTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    Integer getOrderCount(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
+
 }
