@@ -66,4 +66,10 @@ public interface OrderMapper {
 
     @Update("update orders set status=3 where id=#{id}")
     void acceptOrder(OrdersConfirmDTO ordersConfirmDTO);
+
+    @Select("select * from orders where status=#{status} and order_time<#{time}")
+    List<Orders> getByStatusAndOrderTime(Integer pendingPayment, LocalDateTime time);
+
+
+
 }
