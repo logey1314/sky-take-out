@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.entity.User;
 import com.sky.mapper.OrderMapper;
@@ -8,6 +9,7 @@ import com.sky.mapper.UserMapper;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -179,5 +183,33 @@ public class ReportServicelmpl implements ReportService {
         orderReportVO.setOrderCompletionRate((totalVaildorderCount/totalorderCount)*100.0);
 
         return orderReportVO;
+    }
+    /**
+     * 统计销量
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public SalesTop10ReportVO top10(LocalDate begin, LocalDate end) {
+
+
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        List<GoodsSalesDTO> salesTop = orderMapper.getSalesTop(beginTime, endTime);
+
+        //todo 使用流
+        List<String> names = salesTop.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+        String nameList = StringUtils.join(names, ",");
+
+        List<Integer> number = salesTop.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
+        String numberList = StringUtils.join(number, ",");
+
+        SalesTop10ReportVO salesTop10ReportVO = new SalesTop10ReportVO();
+        salesTop10ReportVO.setNameList(nameList);
+        salesTop10ReportVO.setNumberList(numberList);
+
+        return salesTop10ReportVO;
     }
 }
