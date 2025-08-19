@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.sky.WebSocket.WebSockerServer;
 import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.entity.User;
@@ -8,15 +9,20 @@ import com.sky.mapper.ReportMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.service.WorkspaceService;
+import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.StringUtil;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,6 +40,8 @@ public class ReportServicelmpl implements ReportService {
     private OrderMapper orderMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private WorkspaceService workspaceService;
 
 
     /**
@@ -211,5 +219,47 @@ public class ReportServicelmpl implements ReportService {
         salesTop10ReportVO.setNumberList(numberList);
 
         return salesTop10ReportVO;
+    }
+    /**
+     * 导出excel
+     * @param response
+     */
+    @Override
+    public void export(HttpServletResponse response) {
+        LocalDate begin = LocalDate.now().minusDays(30);
+        LocalDate end = LocalDate.now().minusDays(1);
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        //查询数据库
+        BusinessDataVO businessData = workspaceService.getBusinessData(beginTime, endTime);
+
+        //写入excel  poi
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
+
+        try {
+            XSSFWorkbook excel = new XSSFWorkbook(in);
+            XSSFSheet sheet= excel.getSheet("Sheet1");
+
+            sheet.getRow(1).getCell(1).setCellValue("时间"+begin+"至"+end);
+               //
+               //省略其他
+               //
+            //输出流下载到浏览器
+            ServletOutputStream out = response.getOutputStream();
+            excel.write(out);
+
+
+            out.close();
+            excel.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
     }
 }
