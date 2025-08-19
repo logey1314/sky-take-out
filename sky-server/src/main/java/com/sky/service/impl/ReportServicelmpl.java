@@ -139,30 +139,6 @@ public class ReportServicelmpl implements ReportService {
         ArrayList<Integer> orderCountList = new ArrayList<>();
         ArrayList<Integer> validOrderCountList = new ArrayList<>();
 
-        dateList.add(begin);
-        while(!begin.equals(end)){
-            begin=begin.plusDays(1);
-            dateList.add(begin);
-        }
-        for (LocalDate date : dateList) {
-            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
-            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
-            //一天总订单
-            Integer status=null;
-            Integer orderCount = orderMapper.getOrderCount(beginTime, endTime, null);
-            if(orderCount==null){
-                orderCount=0;
-            }
-            orderCountList.add(orderCount);
-            //一天有效订单
-            Integer validOrderCount= orderMapper.getOrderCount(beginTime, endTime, Orders.COMPLETED);
-            if(validOrderCount==null){
-                validOrderCount=0;
-            }
-            validOrderCountList.add(validOrderCount);
-
-        }
-
         // 期间总订单
         Integer status=null;
         LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
@@ -177,6 +153,33 @@ public class ReportServicelmpl implements ReportService {
         if(totalVaildorderCount==null){
             totalVaildorderCount=0;
         }
+
+
+        dateList.add(begin);
+        while(!begin.equals(end)){
+            begin=begin.plusDays(1);
+            dateList.add(begin);
+        }
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime1 = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime1 = LocalDateTime.of(date, LocalTime.MAX);
+            //一天总订单
+
+            Integer orderCount = orderMapper.getOrderCount(beginTime1, endTime1, status);
+            if(orderCount==null){
+                orderCount=0;
+            }
+            orderCountList.add(orderCount);
+            //一天有效订单
+            Integer validOrderCount= orderMapper.getOrderCount(beginTime, endTime, Orders.COMPLETED);
+            if(validOrderCount==null){
+                validOrderCount=0;
+            }
+            validOrderCountList.add(validOrderCount);
+
+        }
+
+
 
         String date = StringUtils.join(dateList, ",");
         String va = StringUtils.join(validOrderCountList, ",");

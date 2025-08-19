@@ -459,7 +459,7 @@ public class Orderlmpl implements OrderService {
     @Override
     public void reminder(Long id) {
         Orders order = orderMapper.getOrder(String.valueOf(id));
-        if (order == null||!order.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+        if (order == null||!order.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
         HashMap<Object, Object> map = new HashMap<>();

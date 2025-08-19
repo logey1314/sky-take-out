@@ -114,11 +114,11 @@
     <select id="getTurnOver" resultType="java.lang.Double">
         select sum(amount) from orders
         <where>
-            <if test="begin != null">
-                and order_time &gt; #{begin}
+            <if test="beginTime != null">
+                and order_time &gt; #{beginTime}
             </if>
-            <if test="end != null">
-                and order_time &lt; #{end}
+            <if test="endTime != null">
+                and order_time &lt; #{endTime}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -130,11 +130,11 @@
     <select id="getOrderCount" resultType="java.lang.Integer">
         select COUNT(id) from orders
         <where>
-            <if test="begin != null">
-                and order_time &gt; #{begin}
+            <if test="beginTime != null">
+                and order_time &gt; #{beginTime}
             </if>
-            <if test="end != null">
-                and order_time &lt; #{end}
+            <if test="endTime != null">
+                and order_time &lt; #{endTime}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -148,11 +148,11 @@
         FROM order_detail od, orders o
         WHERE od.order_id = o.id
         AND o.status = 5
-        <if test="begin != null">
-            AND o.order_time &gt; #{begin}
+        <if test="beginTime != null">
+            AND o.order_time &gt; #{beginTime}
         </if>
-        <if test="end != null">
-            AND o.order_time &lt; #{end}
+        <if test="endTime != null">
+            AND o.order_time &lt; #{endTime}
         </if>
         GROUP BY od.name
         ORDER BY number DESC
