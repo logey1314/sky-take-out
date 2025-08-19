@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -21,4 +22,11 @@ public interface UserMapper {
 
     @Select("select COUNT(id) from user where id is not null ")
     Integer getUserTotalStatistics();
+
+    /**
+     * 根据动态条件统计用户数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }

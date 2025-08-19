@@ -105,4 +105,12 @@ public interface OrderMapper {
      */
     Integer countByMap(Map map);
 
+    /**
+     * 根据动态条件统计营业额数据
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
+
+
 }
